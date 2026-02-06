@@ -4,6 +4,8 @@ import { AuthService } from './auth.service';
 import { AdminModule } from 'src/users/servers/admins.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CloudinaryService } from 'src/configs/cloudinary/cloudinary.service';
+import { CloudinaryModule } from 'src/configs/cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -17,8 +19,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         signOptions: { expiresIn: '30d' },
       }),
     }),
+    CloudinaryModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, CloudinaryService],
 })
 export class AuthModule {}

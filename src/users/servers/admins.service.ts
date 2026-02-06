@@ -9,6 +9,7 @@ import { LoginAdminDto } from 'src/dto/login-admin.dto';
 import { JwtService } from '@nestjs/jwt';
 import { AdminProfileDto } from 'src/dto/get-adminProfile.dto';
 import { adminProfileInterface } from 'src/interfaces/adminProfile.interface';
+import { UpdateProfileAdminDto2 } from 'src/dto/put-profile.dto';
 @Injectable()
 export class AdminService {
   constructor(
@@ -103,5 +104,21 @@ export class AdminService {
     };
 
     return data;
+  }
+
+  async updateProfileAdmin(updateProfileAdminDto2: UpdateProfileAdminDto2) {
+    try {
+      const id = updateProfileAdminDto2.id;
+      delete updateProfileAdminDto2.id;
+      await this.adminRepository.update(id, updateProfileAdminDto2);
+
+      return {
+        status: HttpStatus.OK,
+        message: 'Complete',
+      };
+    } catch (error) {
+      console.log(error);
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    }
   }
 }
