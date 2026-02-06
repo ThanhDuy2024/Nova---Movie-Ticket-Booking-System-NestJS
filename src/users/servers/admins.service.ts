@@ -7,6 +7,8 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { LoginAdminDto } from 'src/dto/login-admin.dto';
 import { JwtService } from '@nestjs/jwt';
+import { AdminProfileDto } from 'src/dto/get-adminProfile.dto';
+import { adminProfileInterface } from 'src/interfaces/adminProfile.interface';
 @Injectable()
 export class AdminService {
   constructor(
@@ -45,6 +47,7 @@ export class AdminService {
     try {
       const check = await this.adminRepository.findOneBy({
         email: loginAdminDto.email,
+        isActive: 'active',
       });
 
       const checkPassword = await bcrypt.compare(
@@ -72,5 +75,33 @@ export class AdminService {
       console.log(error);
       throw new HttpException('Email or password failed', HttpStatus.NOT_FOUND);
     }
+  }
+
+  async adminInfor(adminProfileDto: AdminProfileDto) {
+    const profileAdmin = await this.adminRepository.findOneBy({
+      id: adminProfileDto.id,
+      isActive: 'active',
+    });
+
+    if (!profileAdmin) {
+      throw new HttpException(
+        'Your account has been banned!',
+        HttpStatus.NOT_ACCEPTABLE,
+      );
+    }
+
+    const data: adminProfileInterface = {
+      id: profileAdmin.id,
+      firstName: profileAdmin.firstName,
+      lastName: profileAdmin.lastName,
+      email: profileAdmin.email,
+      role: profileAdmin.role || '',
+      isActive: profileAdmin.isActive,
+      image: profileAdmin.image || '',
+      createdAt: profileAdmin.createdAt,
+      updatedAt: profileAdmin.updatedAt,
+    };
+
+    return data;
   }
 }

@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
   Body,
   Controller,
@@ -29,6 +29,6 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Get('profile')
   profile(@Request() req) {
-    return req.user;
+    return this.authService.information(req.user.id);
   }
 }
