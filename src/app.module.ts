@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdminModule } from './users/servers/admins.module';
 import { AuthModule } from './auth/servers/auth.module';
-import { MoviesModule } from './movies/clients/servers/movies.module';
+import { MoviesModule } from './movies/servers/movies.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
