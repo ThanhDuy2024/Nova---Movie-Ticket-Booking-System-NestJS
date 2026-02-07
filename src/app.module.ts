@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdminEntity } from './Models/admin.entity';
 import { AdminModule } from './users/servers/admins.module';
 import { AuthModule } from './auth/servers/auth.module';
+import { MovieEntity } from './Models/movies.entity';
+import { MoviesModule } from './movies/clients/servers/movies.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -19,12 +21,13 @@ import { AuthModule } from './auth/servers/auth.module';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
-        entities: [AdminEntity],
+        entities: [AdminEntity, MovieEntity],
         synchronize: false,
       }),
     }),
     AdminModule,
     AuthModule,
+    MoviesModule,
   ],
 })
 export class AppModule {}

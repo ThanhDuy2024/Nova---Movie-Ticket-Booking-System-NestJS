@@ -1,15 +1,17 @@
 import { Module } from '@nestjs/common';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
-import { AdminModule } from 'src/users/servers/admins.module';
-import { JwtModule } from '@nestjs/jwt';
+import { MoviesController } from './movies.controller';
+import { AuthModule } from 'src/auth/servers/auth.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 import { CloudinaryService } from 'src/configs/cloudinary/cloudinary.service';
-import { CloudinaryModule } from 'src/configs/cloudinary/cloudinary.module';
+import { MoviesService } from './movies.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { MovieEntity } from 'src/Models/movies.entity';
 
 @Module({
   imports: [
-    AdminModule,
+    AuthModule,
+    TypeOrmModule.forFeature([MovieEntity]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -19,10 +21,8 @@ import { CloudinaryModule } from 'src/configs/cloudinary/cloudinary.module';
         signOptions: { expiresIn: '30d' },
       }),
     }),
-    CloudinaryModule,
   ],
-  controllers: [AuthController],
-  providers: [AuthService, CloudinaryService],
-  exports: [AuthModule],
+  controllers: [MoviesController],
+  providers: [CloudinaryService, MoviesService],
 })
-export class AuthModule {}
+export class MoviesModule {}
