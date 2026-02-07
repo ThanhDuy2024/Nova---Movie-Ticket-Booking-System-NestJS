@@ -7,11 +7,12 @@ import { CloudinaryService } from 'src/configs/cloudinary/cloudinary.service';
 import { MoviesService } from './movies.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MovieEntity } from 'src/Models/movies.entity';
+import { AdminEntity } from 'src/Models/admin.entity';
 
 @Module({
   imports: [
     AuthModule,
-    TypeOrmModule.forFeature([MovieEntity]),
+    TypeOrmModule.forFeature([MovieEntity, AdminEntity]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

@@ -18,7 +18,7 @@ export class MovieEntity {
   description: string;
 
   @Column()
-  duration: number;
+  duration: string;
 
   @Column()
   release_date: string;
@@ -26,10 +26,10 @@ export class MovieEntity {
   @Column()
   language: string;
 
-  @Column()
+  @Column({ nullable: true })
   director: string;
 
-  @Column()
+  @Column({ nullable: true })
   cast: string;
 
   @Column({ nullable: true })
@@ -48,8 +48,8 @@ export class MovieEntity {
   updatedAt: Date;
 
   @Column()
-  createdBy: string;
+  createdBy: number;
 
   @Column()
-  updatedBy: string;
+  updatedBy: number;
 }

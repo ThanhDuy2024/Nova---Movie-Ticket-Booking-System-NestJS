@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AdminEntity } from './Models/admin.entity';
 import { AdminModule } from './users/servers/admins.module';
 import { AuthModule } from './auth/servers/auth.module';
-import { MovieEntity } from './Models/movies.entity';
 import { MoviesModule } from './movies/clients/servers/movies.module';
 @Module({
   imports: [
@@ -21,7 +19,7 @@ import { MoviesModule } from './movies/clients/servers/movies.module';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
-        entities: [AdminEntity, MovieEntity],
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: false,
       }),
     }),
