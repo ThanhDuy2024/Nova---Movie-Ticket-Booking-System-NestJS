@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateMoviesDto } from 'src/dto/create-movie.dto';
 import { AdminEntity } from 'src/Models/admin.entity';
+import { CategoryEntity } from 'src/Models/category.entity';
 import { MovieEntity } from 'src/Models/movies.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 @Injectable()
 export class MoviesService {
@@ -12,6 +14,8 @@ export class MoviesService {
     private movieEntity: Repository<MovieEntity>,
     @InjectRepository(AdminEntity)
     private adminEntity: Repository<AdminEntity>,
+    @InjectRepository(CategoryEntity)
+    private categoryEntity: Repository<CategoryEntity>,
   ) {}
 
   async createMovie(
@@ -27,17 +31,29 @@ export class MoviesService {
       if (!check) {
         throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
       }
+      const movie = new MovieEntity();
+      movie.title = createMoviesDto.title;
+      movie.cast = createMoviesDto.cast;
 
-      let data: object;
+      const categoryIds: number[] = JSON.parse(createMoviesDto.categories);
+      const categories = await this.categoryEntity.findBy({
+        id: In(categoryIds),
+      });
+      movie.categories = movie.categories = categories;
+      movie.description = createMoviesDto.description;
+      movie.createdBy = createdBy;
+      movie.director = createMoviesDto.director;
+      movie.duration = createMoviesDto.duration;
+      movie.language = createMoviesDto.language;
+      movie.release_date = String(createMoviesDto.release_date);
+      movie.status = createMoviesDto.status;
+      movie.trailer_url = createMoviesDto.trailer_url;
+      movie.updatedBy = createdBy;
+
       if (image !== undefined) {
-        data = {
-          ...createMoviesDto,
-          image_url: image,
-          createdBy: createdBy,
-          updatedBy: createdBy,
-        };
+        movie.image_url = image;
       }
-      await this.movieEntity.save(data);
+      await this.movieEntity.manager.save(movie);
       return {
         status: HttpStatus.OK,
         message: 'The movie has create complete',

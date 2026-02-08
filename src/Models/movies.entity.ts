@@ -2,14 +2,21 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { CategoryEntity } from './category.entity';
 
 @Entity()
 export class MovieEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @ManyToMany(() => CategoryEntity)
+  @JoinTable()
+  categories: CategoryEntity[];
 
   @Column()
   title: string;

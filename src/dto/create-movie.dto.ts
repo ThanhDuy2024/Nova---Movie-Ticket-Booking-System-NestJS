@@ -14,7 +14,7 @@ export class CreateMoviesDto {
 
   @IsString()
   @IsNotEmpty()
-  release_date: Date;
+  release_date: string;
 
   @IsString()
   @IsNotEmpty()
@@ -31,4 +31,7 @@ export class CreateMoviesDto {
 
   @IsString()
   status?: string;
+
+  @IsString()
+  categories?: string;
 }

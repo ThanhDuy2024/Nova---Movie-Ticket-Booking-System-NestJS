@@ -4,6 +4,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdminModule } from './users/servers/admins.module';
 import { AuthModule } from './auth/servers/auth.module';
 import { MoviesModule } from './movies/servers/movies.module';
+import { MovieEntity } from './Models/movies.entity';
+import { CategoryEntity } from './Models/category.entity';
+import { AdminEntity } from './Models/admin.entity';
+import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -19,8 +23,17 @@ import { MoviesModule } from './movies/servers/movies.module';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        entities: [MovieEntity, CategoryEntity, AdminEntity],
         synchronize: false,
+      }),
+    }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        global: true,
+        secret: configService.get('JWT'),
+        signOptions: { expiresIn: '30d' },
       }),
     }),
     AdminModule,

@@ -8,11 +8,12 @@ import { MoviesService } from './movies.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MovieEntity } from 'src/Models/movies.entity';
 import { AdminEntity } from 'src/Models/admin.entity';
+import { CategoryEntity } from 'src/Models/category.entity';
 
 @Module({
   imports: [
     AuthModule,
-    TypeOrmModule.forFeature([MovieEntity, AdminEntity]),
+    TypeOrmModule.forFeature([MovieEntity, AdminEntity, CategoryEntity]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
