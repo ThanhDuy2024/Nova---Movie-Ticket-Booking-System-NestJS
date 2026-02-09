@@ -8,6 +8,7 @@ import { MovieEntity } from './Models/movies.entity';
 import { CategoryEntity } from './Models/category.entity';
 import { AdminEntity } from './Models/admin.entity';
 import { JwtModule } from '@nestjs/jwt';
+import { CategoryModule } from './categories/servers/category.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -39,6 +40,7 @@ import { JwtModule } from '@nestjs/jwt';
     AdminModule,
     AuthModule,
     MoviesModule,
+    CategoryModule,
   ],
 })
 export class AppModule {}

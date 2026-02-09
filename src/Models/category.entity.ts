@@ -21,8 +21,8 @@ export class CategoryEntity {
   updatedAt: Date;
 
   @Column({ nullable: false })
-  createdBy: string;
+  createdBy: number;
 
   @Column()
-  updatedBy: string;
+  updatedBy: number;
 }
