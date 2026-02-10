@@ -3,6 +3,7 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   Request,
   UploadedFile,
@@ -40,5 +41,11 @@ export class MoviesController {
       result,
       Number(req.user.id),
     );
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('list')
+  getMovie() {
+    return this.moviesService.getMovie();
   }
 }

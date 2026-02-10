@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -57,6 +60,53 @@ export class MoviesService {
       return {
         status: HttpStatus.OK,
         message: 'The movie has create complete',
+      };
+    } catch (error) {
+      console.log(error);
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async getMovie() {
+    try {
+      const movieList = await this.movieEntity.find({
+        relations: {
+          categories: true,
+        },
+      });
+
+      const data: Array<object> = [];
+
+      for (const item of movieList) {
+        const rawData: any = item;
+        const checkUser1 = this.adminEntity.findOneBy({
+          id: item.createdBy,
+          isActive: 'active',
+        });
+
+        if (checkUser1) {
+          rawData.createdByAdmin =
+            (await checkUser1).firstName + (await checkUser1).lastName;
+        } else {
+          rawData.updatedByAdmin = 'none';
+        }
+
+        const checkUser2 = await this.adminEntity.findOneBy({
+          id: item.updatedBy,
+          isActive: 'active',
+        });
+
+        if (checkUser2) {
+          rawData.updatedByAdmin = checkUser2.firstName + checkUser2.lastName;
+        } else {
+          rawData.updatedByAdmin = 'none';
+        }
+
+        data.push(rawData);
+      }
+      return {
+        status: HttpStatus.OK,
+        data: data,
       };
     } catch (error) {
       console.log(error);
