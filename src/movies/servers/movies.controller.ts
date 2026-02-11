@@ -5,6 +5,7 @@ import {
   Controller,
   Get,
   Post,
+  Query,
   Request,
   UploadedFile,
   UseGuards,
@@ -45,7 +46,7 @@ export class MoviesController {
 
   @UseGuards(AuthGuard)
   @Get('list')
-  getMovie() {
-    return this.moviesService.getMovie();
+  getMovie(@Query('status') status: string) {
+    return this.moviesService.getMovie(status);
   }
 }

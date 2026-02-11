@@ -67,13 +67,20 @@ export class MoviesService {
     }
   }
 
-  async getMovie() {
+  async getMovie(statusQuery: string) {
     try {
-      const movieList = await this.movieEntity.find({
+      const findQuery: any = {
         relations: {
           categories: true,
         },
-      });
+        where: {},
+      };
+
+      if (statusQuery) {
+        findQuery.where.status = statusQuery;
+      }
+
+      const movieList = await this.movieEntity.find(findQuery);
 
       const data: Array<object> = [];
 
