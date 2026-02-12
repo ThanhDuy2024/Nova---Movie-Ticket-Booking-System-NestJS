@@ -8,7 +8,8 @@ import { CreateMoviesDto } from 'src/dto/create-movie.dto';
 import { AdminEntity } from 'src/Models/admin.entity';
 import { CategoryEntity } from 'src/Models/category.entity';
 import { MovieEntity } from 'src/Models/movies.entity';
-import { In, Repository } from 'typeorm';
+import { Between, In, Repository } from 'typeorm';
+import { QueryUrlDto } from './dto/queryUrl.dto';
 
 @Injectable()
 export class MoviesService {
@@ -67,7 +68,7 @@ export class MoviesService {
     }
   }
 
-  async getMovie(statusQuery: string) {
+  async getMovie(queryUrl: QueryUrlDto) {
     try {
       const findQuery: any = {
         relations: {
@@ -76,8 +77,15 @@ export class MoviesService {
         where: {},
       };
 
-      if (statusQuery) {
-        findQuery.where.status = statusQuery;
+      if (queryUrl.status == 'inactive' || queryUrl.status == 'active') {
+        findQuery.where.status = queryUrl.status;
+      }
+
+      if (queryUrl.startDate && queryUrl.endDate) {
+        findQuery.where.release_date = Between(
+          queryUrl.startDate,
+          queryUrl.endDate,
+        );
       }
 
       const movieList = await this.movieEntity.find(findQuery);

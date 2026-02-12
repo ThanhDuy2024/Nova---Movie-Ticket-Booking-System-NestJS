@@ -16,6 +16,7 @@ import { AuthGuard } from 'src/auth/servers/auth.guard';
 import { CloudinaryService } from 'src/configs/cloudinary/cloudinary.service';
 import { MoviesService } from './movies.service';
 import { CreateMoviesDto } from 'src/dto/create-movie.dto';
+import { QueryUrlDto } from './dto/queryUrl.dto';
 
 @Controller('admin/movie')
 export class MoviesController {
@@ -46,7 +47,7 @@ export class MoviesController {
 
   @UseGuards(AuthGuard)
   @Get('list')
-  getMovie(@Query('status') status: string) {
-    return this.moviesService.getMovie(status);
+  getMovie(@Query() queryUrl: QueryUrlDto) {
+    return this.moviesService.getMovie(queryUrl);
   }
 }
