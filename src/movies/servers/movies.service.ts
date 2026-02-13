@@ -8,7 +8,7 @@ import { CreateMoviesDto } from 'src/dto/create-movie.dto';
 import { AdminEntity } from 'src/Models/admin.entity';
 import { CategoryEntity } from 'src/Models/category.entity';
 import { MovieEntity } from 'src/Models/movies.entity';
-import { Between, In, Repository } from 'typeorm';
+import { Between, In, Like, Repository } from 'typeorm';
 import { QueryUrlDto } from './dto/queryUrl.dto';
 
 @Injectable()
@@ -88,6 +88,9 @@ export class MoviesService {
         );
       }
 
+      if (queryUrl.search) {
+        findQuery.where.title = Like(`%${queryUrl.search}%`);
+      }
       const movieList = await this.movieEntity.find(findQuery);
 
       const data: Array<object> = [];
