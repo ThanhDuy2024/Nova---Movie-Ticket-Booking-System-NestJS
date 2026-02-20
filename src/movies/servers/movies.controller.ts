@@ -4,7 +4,9 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
+  Put,
   Query,
   Request,
   UploadedFile,
@@ -49,5 +51,27 @@ export class MoviesController {
   @Get('list')
   getMovie(@Query() queryUrl: QueryUrlDto) {
     return this.moviesService.getMovie(queryUrl);
+  }
+
+  @UseGuards(AuthGuard)
+  @Put('update/:id')
+  @UseInterceptors(FileInterceptor('image_url'))
+  async putMovie(
+    @Param('id') id: string,
+    @Request() req,
+    @Body() updateMovieDto: CreateMoviesDto,
+    @UploadedFile() file?: Express.Multer.File,
+  ) {
+    let result: string = '';
+    if (file) {
+      const urlImage: any = await this.cloudinaryService.uploadFile(file);
+      result = urlImage.secure_url;
+    }
+    return this.moviesService.updateMovie(
+      Number(id),
+      updateMovieDto,
+      result,
+      Number(req.user.id),
+    );
   }
 }

@@ -146,4 +146,55 @@ export class MoviesService {
       throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     }
   }
+
+  async updateMovie(
+    movieId: number,
+    updateMovieDto: CreateMoviesDto,
+    image_url: string,
+    updatedBy: number,
+  ) {
+    const dataUpdate: any = updateMovieDto;
+
+    const checkUser = await this.adminEntity.findBy({
+      id: updatedBy,
+      isActive: 'active',
+    });
+
+    if (!checkUser) {
+      throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+    } else {
+      dataUpdate.updatedBy = updatedBy;
+    }
+
+    const categoryIds: number[] = JSON.parse(updateMovieDto.categories);
+    const categories = await this.categoryEntity.findBy({
+      id: In(categoryIds),
+    });
+
+    const movie = await this.movieEntity.findOne({
+      where: {
+        id: movieId,
+      },
+    });
+
+    movie.categories = categories;
+    movie.cast = dataUpdate.cast;
+    movie.description = dataUpdate.description;
+    movie.director = dataUpdate.director;
+    movie.duration = dataUpdate.duration;
+    if (image_url !== '') {
+      movie.image_url = image_url;
+    }
+    movie.language = dataUpdate.language;
+    movie.release_date = dataUpdate.release_date;
+    movie.status = dataUpdate.status;
+    movie.title = dataUpdate.title;
+    movie.trailer_url = dataUpdate.trailer_url;
+    movie.updatedBy = dataUpdate.updatedBy;
+    await this.movieEntity.save(movie);
+    return {
+      status: HttpStatus.OK,
+      message: 'The movie has update complete',
+    };
+  }
 }
