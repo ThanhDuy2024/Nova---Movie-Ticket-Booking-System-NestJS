@@ -75,7 +75,21 @@ export class MoviesService {
           categories: true,
         },
         where: {},
+        order: {
+          createdAt: 'DESC',
+        },
       };
+
+      const totalMovie = await this.movieEntity.count(findQuery);
+      const totalPage = Math.ceil(totalMovie / Number(queryUrl.limit));
+      let skip = 0;
+      if (Number(queryUrl.page) > 0 && Number(queryUrl.page) <= totalPage) {
+        const pageNumber = Number(queryUrl.page);
+        skip = (pageNumber - 1) * Number(queryUrl.limit);
+      }
+
+      findQuery.skip = skip;
+      findQuery.take = Number(queryUrl.limit);
 
       if (queryUrl.status == 'inactive' || queryUrl.status == 'active') {
         findQuery.where.status = queryUrl.status;
@@ -125,6 +139,7 @@ export class MoviesService {
       return {
         status: HttpStatus.OK,
         data: data,
+        totalPage: totalPage,
       };
     } catch (error) {
       console.log(error);
