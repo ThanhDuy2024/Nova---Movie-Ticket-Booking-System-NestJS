@@ -4,9 +4,15 @@ import { AuthModule } from 'src/auth/servers/auth.module';
 import { CategoryEntity } from 'src/Models/category.entity';
 import { CategoryController } from './category.controller';
 import { CategoryService } from './category.service';
+import { AdminModule } from 'src/users/servers/admins.module';
+import { AdminEntity } from 'src/Models/admin.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CategoryEntity]), AuthModule],
+  imports: [
+    TypeOrmModule.forFeature([CategoryEntity, AdminEntity]),
+    AuthModule,
+    AdminModule,
+  ],
   controllers: [CategoryController],
   providers: [CategoryService],
   exports: [CategoryModule],
