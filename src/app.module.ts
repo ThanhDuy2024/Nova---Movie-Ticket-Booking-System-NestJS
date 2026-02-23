@@ -9,6 +9,8 @@ import { CategoryEntity } from './Models/category.entity';
 import { AdminEntity } from './Models/admin.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { CategoryModule } from './categories/servers/category.module';
+import { RoomsEntity } from './Models/rooms.entity';
+import { RoomsModule } from './rooms/rooms.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -24,7 +26,7 @@ import { CategoryModule } from './categories/servers/category.module';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
-        entities: [MovieEntity, CategoryEntity, AdminEntity],
+        entities: [MovieEntity, CategoryEntity, AdminEntity, RoomsEntity],
         synchronize: false,
       }),
     }),
@@ -41,6 +43,7 @@ import { CategoryModule } from './categories/servers/category.module';
     AuthModule,
     MoviesModule,
     CategoryModule,
+    RoomsModule,
   ],
 })
 export class AppModule {}
