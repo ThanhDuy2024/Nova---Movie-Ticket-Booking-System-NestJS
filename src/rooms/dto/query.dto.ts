@@ -12,4 +12,7 @@ export class QueryDto {
 
   @IsString()
   type: string;
+
+  @IsString()
+  status: string;
 }

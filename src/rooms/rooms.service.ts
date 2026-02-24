@@ -63,6 +63,10 @@ export class RoomService {
       findQuery.where.type = queryDto.type;
     }
 
+    if (queryDto.status) {
+      findQuery.where.status = queryDto.status;
+    }
+
     const totalRooms = await this.roomsEntity.count(findQuery);
     const totalPage = Math.ceil(totalRooms / Number(queryDto.limit));
 
