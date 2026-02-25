@@ -2,28 +2,28 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { SeatsEntity } from './seats.entity';
+import { RoomsEntity } from './rooms.entity';
 
-@Entity('rooms')
-export class RoomsEntity {
+@Entity()
+export class SeatsEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToMany(() => SeatsEntity, (seatsEntity) => seatsEntity.room_id)
-  seats: SeatsEntity[];
-
-  @Column({ nullable: false })
-  room_name: string;
-
-  @Column({ nullable: false })
-  capacity: number;
+  @ManyToOne(() => RoomsEntity, (roomEntity) => roomEntity.seats)
+  room_id: RoomsEntity;
 
   @Column()
-  type: string;
+  seat_row: string;
+
+  @Column()
+  seat_number: number;
+
+  @Column({ default: 'normal' })
+  seat_type: string;
 
   @Column({ default: 'active' })
   status: string;

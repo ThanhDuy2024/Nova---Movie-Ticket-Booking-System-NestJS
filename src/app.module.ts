@@ -11,6 +11,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { CategoryModule } from './categories/servers/category.module';
 import { RoomsEntity } from './Models/rooms.entity';
 import { RoomsModule } from './rooms/rooms.module';
+import { SeatsEntity } from './Models/seats.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -26,7 +27,13 @@ import { RoomsModule } from './rooms/rooms.module';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
-        entities: [MovieEntity, CategoryEntity, AdminEntity, RoomsEntity],
+        entities: [
+          MovieEntity,
+          CategoryEntity,
+          AdminEntity,
+          RoomsEntity,
+          SeatsEntity,
+        ],
         synchronize: false,
       }),
     }),
