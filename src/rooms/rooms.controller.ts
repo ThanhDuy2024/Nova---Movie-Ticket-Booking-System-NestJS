@@ -1,8 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
+  Put,
   Query,
   Request,
   UseGuards,
@@ -18,7 +22,6 @@ export class RoomsController {
   @UseGuards(AuthGuard)
   @Post('create')
   createRoom(@Request() req, @Body() roomsDto: RoomsDto) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     return this.roomsService.postRoom(Number(req.user.id), roomsDto);
   }
 
@@ -26,5 +29,15 @@ export class RoomsController {
   @Get('list')
   listRoom(@Query() queryDto: QueryDto) {
     return this.roomsService.getRoom(queryDto);
+  }
+
+  @UseGuards(AuthGuard)
+  @Put('edit/:id')
+  updateRoom(
+    @Param('id') id: string,
+    @Request() req,
+    @Body() roomsDto: RoomsDto,
+  ) {
+    return this.roomsService.putRoom(req.user.id, roomsDto, Number(id));
   }
 }

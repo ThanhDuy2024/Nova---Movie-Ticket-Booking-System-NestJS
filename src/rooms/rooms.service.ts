@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { RoomsDto } from 'src/dto/create-room.dto';
 import { AdminEntity } from 'src/Models/admin.entity';
 import { RoomsEntity } from 'src/Models/rooms.entity';
-import { Like, Repository } from 'typeorm';
+import { Like, Not, Repository } from 'typeorm';
 import { QueryDto } from './dto/query.dto';
 
 @Injectable()
@@ -99,6 +99,28 @@ export class RoomService {
       status: HttpStatus.OK,
       data: data,
       totalPage: totalPage,
+    };
+  }
+
+  async putRoom(userId, roomsDto: RoomsDto, roomId) {
+    const data: any = {
+      ...roomsDto,
+      updatedBy: userId,
+    };
+
+    const check = await this.roomsEntity.findOneBy({
+      id: Not(roomId),
+      room_name: roomsDto.room_name,
+    });
+
+    if (check) {
+      throw new HttpException('Room name is exist', HttpStatus.BAD_REQUEST);
+    }
+
+    await this.roomsEntity.update(roomId, data);
+    return {
+      status: HttpStatus.ACCEPTED,
+      message: 'A room update complete',
     };
   }
 }
