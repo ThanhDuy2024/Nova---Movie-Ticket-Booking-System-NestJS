@@ -14,9 +14,7 @@ export class SeatsEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => RoomsEntity, (roomEntity) => roomEntity.seats, {
-    cascade: true,
-  })
+  @ManyToOne(() => RoomsEntity, (roomEntity) => roomEntity.seats)
   @JoinColumn({ name: 'room_id' })
   room: RoomsEntity;
 

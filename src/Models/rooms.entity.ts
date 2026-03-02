@@ -13,7 +13,9 @@ export class RoomsEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToMany(() => SeatsEntity, (seatsEntity) => seatsEntity.room)
+  @OneToMany(() => SeatsEntity, (seatsEntity) => seatsEntity.room, {
+    cascade: true, //Giup save room + seats duoc generate ra san
+  })
   seats: SeatsEntity[];
 
   @Column({ nullable: false })

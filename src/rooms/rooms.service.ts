@@ -40,7 +40,33 @@ export class RoomService {
     data.createdBy = userId;
     data.updatedBy = userId;
 
-    await this.roomsEntity.save(data);
+    const seatsRow = ['A', 'B', 'C', 'D'];
+    const seatsArray: Array<object> = [];
+    for (const item of seatsRow) {
+      for (let i = 1; i <= roomsDto.capacity; i++) {
+        const rawSeat: any = {
+          seat_number: i,
+          seat_row: item,
+          status: 'active',
+          createdBy: userId,
+          updatedBy: userId,
+        };
+
+        if (item == 'A' || item == 'B') {
+          rawSeat.seat_type = 'vip';
+        } else {
+          rawSeat.seat_type = 'normal';
+        }
+
+        seatsArray.push(rawSeat);
+      }
+    }
+
+    const roomAndSeat = this.roomsEntity.create({
+      ...data,
+      seats: seatsArray,
+    });
+    await this.roomsEntity.save(roomAndSeat);
     return {
       status: HttpStatus.CREATED,
       message: 'A room create complete',
