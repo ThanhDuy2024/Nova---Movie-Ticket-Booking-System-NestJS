@@ -12,6 +12,7 @@ import { CategoryModule } from './categories/servers/category.module';
 import { RoomsEntity } from './Models/rooms.entity';
 import { RoomsModule } from './rooms/rooms.module';
 import { SeatsEntity } from './Models/seats.entity';
+import { SeatsModule } from './seats/seats.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -51,6 +52,7 @@ import { SeatsEntity } from './Models/seats.entity';
     MoviesModule,
     CategoryModule,
     RoomsModule,
+    SeatsModule,
   ],
 })
 export class AppModule {}

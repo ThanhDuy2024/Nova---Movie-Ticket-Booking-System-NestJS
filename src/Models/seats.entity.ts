@@ -2,18 +2,22 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { RoomsEntity } from './rooms.entity';
 
-@Entity()
+@Entity('seats')
 export class SeatsEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => RoomsEntity, (roomEntity) => roomEntity.seats)
+  @ManyToOne(() => RoomsEntity, (roomEntity) => roomEntity.seats, {
+    cascade: true,
+  })
+  @JoinColumn({ name: 'room_id' })
   room_id: RoomsEntity;
 
   @Column()
