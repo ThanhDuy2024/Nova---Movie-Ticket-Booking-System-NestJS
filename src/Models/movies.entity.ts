@@ -4,10 +4,12 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { CategoryEntity } from './category.entity';
+import { ShowtimeEntity } from './showtime.entity';
 
 @Entity()
 export class MovieEntity {
@@ -17,6 +19,9 @@ export class MovieEntity {
   @ManyToMany(() => CategoryEntity)
   @JoinTable()
   categories: CategoryEntity[];
+
+  @OneToMany(() => ShowtimeEntity, (showtime) => showtime.movie)
+  showtimes: ShowtimeEntity[];
 
   @Column()
   title: string;

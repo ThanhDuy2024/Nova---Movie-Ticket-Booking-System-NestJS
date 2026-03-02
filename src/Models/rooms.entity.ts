@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { SeatsEntity } from './seats.entity';
+import { ShowtimeEntity } from './showtime.entity';
 
 @Entity('rooms')
 export class RoomsEntity {
@@ -17,6 +18,9 @@ export class RoomsEntity {
     cascade: true, //Giup save room + seats duoc generate ra san
   })
   seats: SeatsEntity[];
+
+  @OneToMany(() => ShowtimeEntity, (showtime) => showtime.room)
+  showtimes: ShowtimeEntity[];
 
   @Column({ nullable: false })
   room_name: string;

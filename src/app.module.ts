@@ -13,6 +13,8 @@ import { RoomsEntity } from './Models/rooms.entity';
 import { RoomsModule } from './rooms/rooms.module';
 import { SeatsEntity } from './Models/seats.entity';
 import { SeatsModule } from './seats/seats.module';
+import { ShowtimeEntity } from './Models/showtime.entity';
+import { ShowtimesModule } from './showtimes/showtimes.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -34,6 +36,7 @@ import { SeatsModule } from './seats/seats.module';
           AdminEntity,
           RoomsEntity,
           SeatsEntity,
+          ShowtimeEntity,
         ],
         synchronize: false,
       }),
@@ -53,6 +56,7 @@ import { SeatsModule } from './seats/seats.module';
     CategoryModule,
     RoomsModule,
     SeatsModule,
+    ShowtimesModule,
   ],
 })
 export class AppModule {}
