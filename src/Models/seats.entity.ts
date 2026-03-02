@@ -18,7 +18,7 @@ export class SeatsEntity {
     cascade: true,
   })
   @JoinColumn({ name: 'room_id' })
-  room_id: RoomsEntity;
+  room: RoomsEntity;
 
   @Column()
   seat_row: string;

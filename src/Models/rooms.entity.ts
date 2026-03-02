@@ -13,7 +13,7 @@ export class RoomsEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToMany(() => SeatsEntity, (seatsEntity) => seatsEntity.room_id)
+  @OneToMany(() => SeatsEntity, (seatsEntity) => seatsEntity.room)
   seats: SeatsEntity[];
 
   @Column({ nullable: false })
