@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -60,6 +62,45 @@ export class ShowtimesService {
     return {
       status: HttpStatus.ACCEPTED,
       message: 'A showtime create complete',
+    };
+  }
+
+  async getShowtime(query: any) {
+    const findQuery: any = {
+      relations: {
+        room: true,
+        movie: true,
+      },
+      where: {},
+      order: {
+        updatedAt: 'DESC',
+      },
+    };
+
+    if (query.roomId) {
+      findQuery.where.room_id = query.roomId;
+    }
+
+    if (query.movieId) {
+      findQuery.where.movie_id = query.movieId;
+    }
+
+    const limit = Number(query.limit);
+    const page = Number(query.page);
+    const totalShowtime = await this.showtimeEntity.count(findQuery);
+    const totalPage = Math.ceil(totalShowtime / limit);
+
+    findQuery.take = limit;
+    findQuery.skip = 0;
+    if (page > 0 && page <= totalPage) {
+      findQuery.skip = (page - 1) * limit;
+    }
+
+    const listShowtime = await this.showtimeEntity.find(findQuery);
+    return {
+      status: HttpStatus.OK,
+      data: listShowtime,
+      totalPage: totalPage,
     };
   }
 }
