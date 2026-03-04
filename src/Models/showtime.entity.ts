@@ -6,9 +6,11 @@ import {
   JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { MovieEntity } from './movies.entity';
 import { RoomsEntity } from './rooms.entity';
+import { TicketsEntity } from './ticket.entity';
 
 @Entity('showtimes')
 export class ShowtimeEntity {
@@ -34,6 +36,9 @@ export class ShowtimeEntity {
   })
   @JoinColumn({ name: 'room_id' })
   room: RoomsEntity;
+
+  @OneToMany(() => TicketsEntity, (ticket) => ticket.showtime)
+  tickets: TicketsEntity[];
 
   @Column({ type: 'datetime' })
   start_time: Date;

@@ -4,12 +4,17 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { OrdersEntity } from './orders.entity';
 
 @Entity('users')
 export class UsersEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @OneToMany(() => OrdersEntity, (order) => order.user)
+  orders: OrdersEntity[];
 
   @Column({ length: 50, unique: true })
   username: string;
